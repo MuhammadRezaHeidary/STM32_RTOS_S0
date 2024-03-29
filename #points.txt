@@ -1,0 +1,47 @@
+1. create ID
+
+osThreadId myTask03Handle;
+
+2. create entry function
+
+void StartTask03(void const * argument);
+
+3. define Thread
+
+osThreadDef(myTask03, StartTask03, osPriorityBelowNormal, 0, 128);
+
+4. create Thread
+
+myTask03Handle = osThreadCreate(osThread(myTask03), NULL);
+
+5. start kernel
+
+osKernelStart();
+
+6. task entry function
+
+void StartTask03(void const * argument)
+{
+  for(;;)
+  {
+	  task03_send();
+//	  osDelay(3000);
+	  osDelay(1000);
+  }
+}
+
+7. task while function
+
+void task03_send() {
+	uint8_t data[] = "This is a message from Task 3\r\n";
+	HAL_UART_Transmit(&huart1, data, sizeof(data) - 1, 500);
+}
+
+
+________________________________________
+Other points:
+1. We should describe tasks with different priorities when using same resource
+for example if we have 3 threads and all of them want to send data via UART1 every 1 second, we should describe and initilize them with different priorities.
+
+2. ...
+
